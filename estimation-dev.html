@@ -23,6 +23,10 @@
         }        
 
         body {
+            a {
+                color: white;
+                text-decoration: underline;
+            }
             font-family: Arial, sans-serif;
             background: var(--main-bg-color);
             color: white;
@@ -127,7 +131,8 @@
     <!----------------------------------------------------------->
 
     <h1 class="header">Formulaire d'estimation de prix pour une échelle en Kit<br />[version en cours de développement]</h1>
-    <div class="header">Pour estimation : sans valeur de devis</div>
+    <div class="header">Pour estimation : sans valeur de devis. <br />Pour demander un devis, rendez-vous sur <a
+        href="https://www.echelleachat.ch/kit">cette page</a>.</div>
 
     <div class="groupe groupe_option">
         <label for="vHauteur" class="label_option">Hauteur de l'échelle (mètres)</label>
@@ -189,8 +194,8 @@
 
     <div class="groupe groupe_totaux">
         <h2>Prix estimé</h2>
-        <i>Sans valeur de devis. Pour demander un devis, rendez-vous sur la page <a
-                href="https://www.echelleachat.ch/kit">suivante</a>.</i><br />
+        <i>Sans valeur de devis. Pour demander un devis, rendez-vous sur <a
+                href="https://www.echelleachat.ch/kit">cette page</a>.</i><br />
         <b>Prix estimé CHF : <span id="vTotalCHF"></span></b><br />
         <b><i>Prix estimé EUR : <span id="vTotalEUR"></span></i></b><br />
     </div>
