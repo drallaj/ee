@@ -17,7 +17,8 @@
 
         /* Pour empêcher scroll horizontal sur Wix */
         html, body {
-            max-width: 100%;
+            max-width: 80%;
+            margin: 0 auto;
             overflow-x: hidden;
         }        
 
@@ -53,7 +54,7 @@
 
         .groupe {
             padding: 10px 15px;
-            margin: 8px 10px;
+            margin: 8px 8px 25px 25px;
             border-radius: 15px;
         }
 
@@ -125,7 +126,7 @@
     <!------------------------------ DEV ------------------------>
     <!----------------------------------------------------------->
 
-    <h1 class="header">Formulaire d'estimation de prix<br />[version en cours de développement]</h1>
+    <h1 class="header">Formulaire d'estimation de prix pour une échelle en Kit<br />[version en cours de développement]</h1>
     <div class="header">Pour estimation : sans valeur de devis</div>
 
     <div class="groupe groupe_option">
@@ -145,24 +146,23 @@
 
     <div class="groupe groupe_option">
         <label class="label_option">Sommet du mât (prix par pièce)</label>
+        <p>Le mât peut être soit couvert par la dernière marche, soit la dépasser, avec différentes options de finition :</p>
         <select name="vSommet" id="vSommet">
-            <option value="sommet_sans" selected>Ne dépasse pas la dernière marche (gratuit)</option>
-            <option value="sommet_bouchon">Le mât dépasse la dernière marche: avec bouchon (gratuit)</option>
-            <option value="sommet_boule_inox">Le mât dépasse la dernière marche: avec boule en inox (+50 CHF pièce)
-            </option>
-            <option value="sommet_chat_cuivre">Le mât dépasse la dernière marche: avec silhouette en cuivre (+150 CHF
-                pièce)</option>
+            <option value="sommet_sans" selected>Ne dépasse pas(gratuit)</option>
+            <option value="sommet_bouchon">Dépasse: bouchon (gratuit)</option>
+            <option value="sommet_boule_inox">Dépasse: boule en inox (+50 CHF pièce)</option>
+            <option value="sommet_chat_cuivre">Dépasse: silhouette en cuivre (+150 CHF pièce)</option>
         </select>
     </div>
 
     <div class="groupe groupe_option">
-        <label class="label_option">Type de fixation de l'échelle (prix pour un ensemble de fixations)</label>
+        <label class="label_option">Type de fixation de l'échelle (prix par set de fixations)</label>
+        <p>L'échelle peut être fixée à la façade soit avec un set de fixations selon le type de mur, soit sur des éléments de la façade comme une tablette de fenêtre, une cheneau ou autre.</p>
         <select name="vTypeFixation" id="vTypeFixation">
-            <option value="mur_beton" selected>Direct sur mur: béton (< 3 mètres: 40 CHF, ≥ 3 mètres: 60 CHF)</option>
-            <option value="mur_isolation">Direct sur mur: isolation (< 3 mètres: 40 CHF, ≥ 3 mètres: 60 CHF)</option>
-            <option value="mur_bois">Direct sur mur: bois (< 3 mètres: 30 CHF, ≥ 3 mètres: 45 CHF)</option>
-            <option value="elements_facade">Sur éléments de façade (chenaux, tablettes, etc.) : collier et pincements à
-                la pièce</option>
+            <option value="mur_beton" selected>Béton (&lt;3m.: 40CHF, ≥3m.: 60CHF)</option>
+            <option value="mur_isolation">Isolation périphérique (&lt;3m.: 40CHF, ≥3m.: 60CHF)</option>
+            <option value="mur_bois">Bois (&lt;3m.: 30CHF, ≥3m.: 45CHF)</option>
+            <option value="elements_facade">Eléments de façade: collier et pincements à la pièce</option>
         </select>
     </div>
 
@@ -220,6 +220,7 @@
             const inputs = document.querySelectorAll('input, select');
             inputs.forEach(input => {
                 input.addEventListener('change', handleInputChange);
+                input.addEventListener('input', handleInputChange);
             });
         }
 
