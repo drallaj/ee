@@ -165,8 +165,7 @@
         >Hauteur de l'échelle (mètres)</label
       >
       <i
-        ><b>&lt; 2.5 mètres:</b> 310 CHF/m., <b>&lt; 4.5 mètre:</b> 280 CHF/m.,
-        <b>≥ 4.5 mètres:</b> 250 CHF/m.</i
+        ><b>De 0 à 6,5 mètres:</b> 310 CHF/m., <b>Dès 6,51 mètres:</b> 280 CHF/m.</i
       ><br />
       <input
         type="number"
@@ -380,9 +379,8 @@
       }
 
       function calculateHauteurPrice(hauteur) {
-        if (hauteur < 2.5) return 310 * hauteur;
-        if (hauteur < 4.5) return 280 * hauteur;
-        return 250 * hauteur;
+        if (hauteur <= 6.5) return 310 * hauteur;
+        return 280 * hauteur;
       }
 
       function calculateCouleurPrice(couleur, hauteur) {
