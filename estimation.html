@@ -1,350 +1,498 @@
 <!DOCTYPE html>
 <html lang="fr">
-
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>Estimation de prix pour échelle à chat</title>
     <style>
-        :root {
-            --main-bg-color: rgb(59, 73, 101);
-            --text-color: rgb(59, 73, 101);
-            --header-text-color: white;
-            --input-border-color: rgb(59, 73, 101);
-            --option-bg-color: white;
-            --total-bg-color: #e1926f;
-            --subtotal-bg-color: #53b7b8;
+      :root {
+        --main-bg-color: rgb(59, 73, 101);
+        --main-text-color: white;
+        --main-link-color: #e1926f;
+        --option-bg-color: white;
+        --option-text-color: rgb(59, 73, 101);
+        --option-link-color: #e1926f;
+        --input-border-color: rgb(59, 73, 101);
+        --total-bg-color: #e1926f;
+        --total-link-color: white;
+        --subtotal-bg-color: #53b7b8;
+        --subtotal-link-color: white;
+      }
+
+      /* Pour empêcher scroll horizontal sur Wix */
+      html,
+      body {
+        max-width: 80%;
+        margin: 0 auto;
+        overflow-x: hidden;
+        font-family: Arial, sans-serif;
+        background: var(--main-bg-color);
+        color: var(--main-text-color);
+      }
+
+      a {
+        text-decoration: none;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+
+      body a {
+        color: var(--main-link-color);
+      }
+
+      .header {
+        text-align: center;
+        margin-bottom: 10px;
+      }
+
+      input[type="number"],
+      select {
+        font-size: 1.2em;
+        margin-top: 5px;
+        margin-right: 5px;
+      }
+
+      input[type="number"] {
+        border-radius: 5px;
+      }
+
+      input,
+      select {
+        background: var(--option-bg-color);
+        color: var(--option-text-color);
+        border: 1px solid var(--input-border-color);
+      }
+
+      .groupe {
+        padding: 10px 15px;
+        margin: 8px 8px 25px 25px;
+        border-radius: 15px;
+      }
+
+      .groupe_option {
+        background: var(--option-bg-color);
+        color: var(--option-text-color);
+        font-style: normal;
+        pointer-events: all;
+        opacity: 1;
+      }
+
+      .groupe_option a {
+        color: var(--option-link-color);
+      }
+
+      .groupe_option_disabled {
+        background: var(--option-bg-color);
+        color: var(--option-text-color);
+        font-style: italic;
+        pointer-events: none;
+        opacity: 0.3;
+      }
+
+      .groupe_totaux {
+        padding: 5px 15px;
+        background: var(--total-bg-color);
+        color: var(--option-text-color);
+      }
+
+      .groupe_totaux a {
+        color: var(--total-link-color);
+      }
+
+      .groupe_sous_totaux {
+        background: var(--subtotal-bg-color);
+        color: var(--option-text-color);
+      }
+
+      .groupe_sous_totaux a {
+        color: var(--subtotal-link-color);
+      }
+
+      .label_option {
+        font-weight: bold;
+        display: block;
+      }
+
+      .label_option_en_ligne {
+        font-weight: bold;
+        display: inline;
+      }
+
+      .groupe_choix {
+        display: block;
+        margin-top: 5px;
+      }
+
+      #elemTauxEURError {
+        font-weight: bold;
+        color: red;
+        a {
+          color: white;
         }
+      }
 
-        /* Pour empêcher scroll horizontal sur Wix */
-        html, body {
-            max-width: 100%;
-            overflow-x: hidden;
-        }        
-
-        body {
-            font-family: Arial, sans-serif;
-            background: var(--main-bg-color);
-            color: white;
+      @media (max-width: 768px) {
+        body,
+        input[type="number"],
+        select {
+          font-size: 0.8em; /* Smaller font size for mobile */
         }
 
         .header {
-            color: var(--header-text-color);
-            text-align: center;
-            margin-bottom: 10px;
+          font-size: 1.2em; /* Adjust header font size */
         }
 
-        input[type="number"],
-        select {
-            font-size: 1.2em;
-            margin-top: 5px;
-            margin-right: 5px;
-        }
-
-        input[type="number"] {
-            border-radius: 5px;
-        }
-
-        input,
-        select {
-            background: var(--option-bg-color);
-            color: var(--text-color);
-            border: 1px solid var(--input-border-color);
-        }
-
-        .groupe {
-            padding: 10px 15px;
-            margin: 8px 10px;
-            border-radius: 15px;
-        }
-
-        .groupe_option {
-            background: var(--option-bg-color);
-            color: var(--text-color);
-            font-style: normal;
-            pointer-events: all;
-            opacity: 1;
-        }
-
-        .groupe_totaux {
-            background: var(--total-bg-color);
-            color: var(--text-color);
-        }
-
-        .groupe_sous_totaux {
-            background: var(--subtotal-bg-color);
-            color: var(--text-color);
-        }
-
-        .groupe_option_disabled {
-            background: var(--option-bg-color);
-            color: var(--text-color);
-            font-style: italic;
-            pointer-events: none;
-            opacity: 0.3;
-        }
-
-        .label_option {
-            font-weight: bold;
-            display: block;
-        }
-
+        .label_option,
         .label_option_en_ligne {
-            font-weight: bold;
-            display: inline;
+          font-size: 0.9em; /* Smaller labels in options */
         }
-
-        .groupe_choix {
-            display: block;
-            margin-top: 5px;
-        }
-
-        #elemTauxEURError {
-            font-weight: bold;
-            color: red;
-        }
-
-        @media (max-width: 768px) {
-            body, input[type="number"], select {
-                font-size: 0.8em; /* Smaller font size for mobile */
-            }
-        
-            .header {
-                font-size: 1.2em; /* Adjust header font size */
-            }
-        
-            .label_option, .label_option_en_ligne {
-                font-size: 0.9em; /* Smaller labels in options */
-            }
-        }
+      }
     </style>
-</head>
+  </head>
 
-<body>
-    <h1 class="header">Formulaire d'estimation de prix</h1>
-    <div class="header">Pour estimation : sans valeur de devis</div>
-
-    <div class="groupe groupe_option">
-        <label for="vHauteur" class="label_option">Hauteur de l'échelle (mètres)</label>
-        <i><b>&lt; 2.5 mètres:</b> 310 CHF/m., <b>&lt; 4.5 mètre:</b> 280 CHF/m., <b>≥ 4.5 mètres:</b> 250
-            CHF/m.</i><br />
-        <input type="number" step="0.05" min="0" max="100" id="vHauteur" value="3"> mètres.
+  <body>
+    <h1 class="header">
+      Formulaire d'estimation de prix pour une échelle en Kit<br />
+    </h1>
+    <div class="header">
+      Pour estimation : sans valeur de devis. <br />Pour demander un devis,
+      rendez-vous sur <a href="https://www.echelleachat.ch/kit">cette page</a>.
     </div>
 
     <div class="groupe groupe_option">
-        <label class="label_option">Couleur du mât (prix par mètre)</label>
-        <select name="vCouleur" id="vCouleur">
-            <option value="couleur_non" selected>Sans (aluminium)</option>
-            <option value="couleur_oui">Avec (+20 CHF/mètre)</option>
-        </select>
+      <label for="vHauteur" class="label_option"
+        >Hauteur de l'échelle (mètres)</label
+      >
+      <i
+        ><b>De 0 à 6,5 mètres:</b> 310 CHF/m., <b>dès 6,51 mètres:</b> 280
+        CHF/m.</i
+      ><br />
+      <input
+        type="number"
+        step="0.05"
+        min="0"
+        max="100"
+        id="vHauteur"
+        value="3"
+      />
+      mètres.
     </div>
 
     <div class="groupe groupe_option">
-        <label class="label_option">Sommet du mât (prix par pièce)</label>
-        <select name="vSommet" id="vSommet">
-            <option value="sommet_sans" selected>Ne dépasse pas la dernière marche (gratuit)</option>
-            <option value="sommet_bouchon">Le mât dépasse la dernière marche: avec bouchon (gratuit)</option>
-            <option value="sommet_boule_inox">Le mât dépasse la dernière marche: avec boule en inox (+50 CHF pièce)
-            </option>
-            <option value="sommet_chat_cuivre">Le mât dépasse la dernière marche: avec silhouette en cuivre (+150 CHF
-                pièce)</option>
-        </select>
+      <label class="label_option">Couleur du mât (prix par mètre)</label>
+      <select name="vCouleur" id="vCouleur">
+        <option value="couleur_non" selected>Sans (aluminium)</option>
+        <option value="couleur_oui">Avec (+20 CHF/mètre)</option>
+      </select>
     </div>
 
     <div class="groupe groupe_option">
-        <label class="label_option">Type de fixation de l'échelle (prix pour un ensemble de fixations)</label>
-        <select name="vTypeFixation" id="vTypeFixation">
-            <option value="mur_beton" selected>Direct sur mur: béton (< 3 mètres: 40 CHF, ≥ 3 mètres: 60 CHF)</option>
-            <option value="mur_isolation">Direct sur mur: isolation (< 3 mètres: 40 CHF, ≥ 3 mètres: 60 CHF)</option>
-            <option value="mur_bois">Direct sur mur: bois (< 3 mètres: 30 CHF, ≥ 3 mètres: 45 CHF)</option>
-            <option value="elements_facade">Sur éléments de façade (chenaux, tablettes, etc.) : collier et pincements à
-                la pièce</option>
-        </select>
+      <label class="label_option">Sommet du mât (prix par pièce)</label>
+      <p>
+        Le mât peut être soit couvert par la dernière marche, soit la dépasser,
+        avec différentes options de finition :
+      </p>
+      <select name="vSommet" id="vSommet">
+        <option value="sommet_sans" selected>Ne dépasse pas(gratuit)</option>
+        <option value="sommet_bouchon">Dépasse: bouchon (gratuit)</option>
+        <option value="sommet_boule_inox">
+          Dépasse: boule en inox (+50 CHF pièce)
+        </option>
+        <option value="sommet_chat_cuivre">
+          Dépasse: silhouette en cuivre (+150 CHF pièce)
+        </option>
+      </select>
+    </div>
+
+    <div class="groupe groupe_option">
+      <label class="label_option"
+        >Type de fixation de l'échelle (prix par set de fixations)</label
+      >
+      <p>
+        L'échelle peut être fixée à la façade soit avec un set de fixations
+        selon le type de mur, soit sur des éléments de la façade comme une
+        tablette de fenêtre, une cheneau ou autre.
+      </p>
+      <select name="vTypeFixation" id="vTypeFixation">
+        <option value="mur_beton" selected>
+          Béton (&lt;3m.: 40CHF, ≥3m.: 60CHF)
+        </option>
+        <option value="mur_isolation">
+          Isolation périphérique (&lt;3m.: 40CHF, ≥3m.: 60CHF)
+        </option>
+        <option value="mur_bois">Bois (&lt;3m.: 30CHF, ≥3m.: 45CHF)</option>
+        <option value="elements_facade">
+          Eléments de façade: collier et pincements à la pièce
+        </option>
+      </select>
     </div>
 
     <div class="groupe groupe_option_disabled" id="groupeElementsFacade">
-        <label class="label_option">Pièces de fixation pour éléments de façade</label>
-        <div class="groupe_choix">
-            <label for="vNbColliers" class="label_choix">Nb de colliers de serrage (20 CHF/pièce)</label> <input
-                type="number" step="1" min="0" max="100" id="vNbColliers" value="0">
-        </div>
-        <div class="groupe_choix">
-            <label for="vNbPincements" class="label_choix">Nb de pincements (25 CHF/pièce)</label> <input type="number"
-                step="1" min="0" max="100" id="vNbPincements" value="0">
-        </div>
+      <label class="label_option"
+        >Pièces de fixation pour éléments de façade</label
+      >
+      <div class="groupe_choix">
+        <label for="vNbColliers" class="label_choix"
+          >Nb de colliers de serrage (20 CHF/pièce)</label
+        >
+        <input
+          type="number"
+          step="1"
+          min="0"
+          max="100"
+          id="vNbColliers"
+          value="0"
+        />
+      </div>
+      <div class="groupe_choix">
+        <label for="vNbPincements" class="label_choix"
+          >Nb de pincements (25 CHF/pièce)</label
+        >
+        <input
+          type="number"
+          step="1"
+          min="0"
+          max="100"
+          id="vNbPincements"
+          value="0"
+        />
+      </div>
     </div>
 
     <div class="groupe groupe_option">
-        <label for="vTauxEUR" class="label_option_en_ligne">Taux de change CHF-EUR</label> <input type="number"
-            step="0.005" min="0" max="10" id="vTauxEUR" value="1.000"><br />
-        <i>Taux indicatif, calculé automatiquement avec <a href="https://www.openexchangerates.org" target="_blank">openexchangerate.org</a>. Modifiable à votre guise. <a
-                href="javascript:fetchExchangeRate()">Rélancer le calcul du taux</a>.</i>
-        <div id="elemTauxEURError" hidden>Le taux du jour n'a pas pu être récupéré. Veuillez entrer le taux vous-même.
-        </div>
+      <label for="vTauxEUR" class="label_option_en_ligne"
+        >Taux de change CHF-EUR</label
+      >
+      <input
+        type="number"
+        step="0.005"
+        min="0"
+        max="10"
+        id="vTauxEUR"
+        value="1.000"
+      />
+      <a href="javascript:fetchExchangeRate()">[Actualiser le taux]</a><br />
+      <i
+        >Taux indicatif, calculé automatiquement avec
+        <a href="https://www.openexchangerates.org" target="_blank"
+          >openexchangerate.org</a
+        >.<br />
+        Modifiable à votre guise, conversion recalculée à la volée.</i
+      >
+      <div id="elemTauxEURError" hidden="">
+        Le taux du jour n'a pas pu être récupéré. Veuillez entrer le taux
+        vous-même.
+      </div>
     </div>
 
     <div class="groupe groupe_totaux">
-        <h2>Prix estimé</h2>
-        <i>Sans valeur de devis. Pour demander un devis, rendez-vous sur la page <a
-                href="https://www.echelleachat.ch/kit">suivante</a>.</i><br />
-        <b>Prix estimé CHF : <span id="vTotalCHF"></span></b><br />
-        <b><i>Prix estimé EUR : <span id="vTotalEUR"></span></i></b><br />
+      <h2>Prix estimé</h2>
+      <b
+        ><bigger>Prix estimé CHF : <span id="vTotalCHF"></span></bigger> *</b
+      ><br />
+      <i>Prix estimé EUR : <span id="vTotalEUR"></span> *</i><br />
+      <i
+        >* Sans valeur de devis. Pour demander un devis, rendez-vous sur
+        <a href="https://www.echelleachat.ch/kit">cette page</a>.</i
+      ><br />
     </div>
 
     <div class="groupe groupe_sous_totaux">
-        <h3>Sous-totaux des options (en CHF)</h3>
-        <b>Hauteur: </b><span id="vTotalHauteur"></span><br />
-        <b>Couleur: </b><span id="vTotalCouleur"></span><br />
-        <b>Sommet: </b><span id="vTotalSommet"></span><br />
-        <b>Type de fixation: </b><span id="vTotalTypeFixation"></span><br />
-        <b>Nb de colliers: </b><span id="vTotalNbColliers"></span><br />
-        <b>Nb de pincements: </b><span id="vTotalNbPincements"></span><br />
+      <h3>Sous-totaux des options (en CHF)</h3>
+      <b>Hauteur: </b><span id="vTotalHauteur"></span><br />
+      <b>Couleur: </b><span id="vTotalCouleur"></span><br />
+      <b>Sommet: </b><span id="vTotalSommet"></span><br />
+      <b>Type de fixation: </b><span id="vTotalTypeFixation"></span><br />
+      <b>Nb de colliers: </b><span id="vTotalNbColliers"></span><br />
+      <b>Nb de pincements: </b><span id="vTotalNbPincements"></span><br />
     </div>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            // Fetch initial exchange rates and set event listeners
-            initialSetup();
+      document.addEventListener("DOMContentLoaded", function () {
+        // Fetch initial exchange rates and set event listeners
+        initialSetup();
+      });
+
+      function initialSetup() {
+        fetchExchangeRate();
+        attachEventListeners();
+      }
+
+      function attachEventListeners() {
+        const inputs = document.querySelectorAll("input, select");
+        inputs.forEach((input) => {
+          input.addEventListener("change", handleInputChange);
+          input.addEventListener("input", handleInputChange);
         });
+      }
 
-        function initialSetup() {
-            fetchExchangeRate();
-            attachEventListeners();
+      function handleInputChange() {
+        calculatePrices();
+        updateUI();
+      }
+
+      function calculatePrices() {
+        const hauteur = parseFloat(document.getElementById("vHauteur").value);
+        const couleur = document.getElementById("vCouleur").value;
+        const sommet = document.getElementById("vSommet").value;
+        const typeFixation = document.getElementById("vTypeFixation").value;
+        const nbColliers = parseInt(
+          document.getElementById("vNbColliers").value
+        );
+        const nbPincements = parseInt(
+          document.getElementById("vNbPincements").value
+        );
+
+        // Calculate individual component prices
+        const prixHauteur = calculateHauteurPrice(hauteur);
+        const prixCouleur = calculateCouleurPrice(couleur, hauteur);
+        const prixSommet = calculateSommetPrice(sommet);
+        const prixTypeFixation = calculateTypeFixationPrice(
+          typeFixation,
+          hauteur
+        );
+        const prixColliers = 20 * nbColliers;
+        const prixPincements = 25 * nbPincements;
+
+        // Update global totals
+        const prixTotalCHF =
+          prixHauteur +
+          prixCouleur +
+          prixSommet +
+          prixTypeFixation +
+          prixColliers +
+          prixPincements;
+        const tauxEUR = parseFloat(document.getElementById("vTauxEUR").value);
+        const prixTotalEUR = prixTotalCHF * tauxEUR;
+
+        // Set global price variables
+        window.prixDetails = {
+          prixHauteur,
+          prixCouleur,
+          prixSommet,
+          prixTypeFixation,
+          prixColliers,
+          prixPincements,
+          prixTotalCHF,
+          prixTotalEUR,
+        };
+      }
+
+      function calculateHauteurPrice(hauteur) {
+        if (hauteur <= 6.5) return 310 * hauteur;
+        return 280 * hauteur;
+      }
+
+      function calculateCouleurPrice(couleur, hauteur) {
+        return couleur === "couleur_oui" ? 20 * hauteur : 0;
+      }
+
+      function calculateSommetPrice(sommet) {
+        switch (sommet) {
+          case "sommet_sans":
+          case "sommet_bouchon":
+            return 0;
+          case "sommet_boule_inox":
+            return 50;
+          case "sommet_chat_cuivre":
+            return 150;
+          default:
+            return 0;
         }
+      }
 
-        function attachEventListeners() {
-            const inputs = document.querySelectorAll('input, select');
-            inputs.forEach(input => {
-                input.addEventListener('change', handleInputChange);
-            });
+      function calculateTypeFixationPrice(typeFixation, hauteur) {
+        let price = 0;
+        switch (typeFixation) {
+          case "mur_beton":
+          case "mur_isolation":
+            price = hauteur < 3 ? 40 : 60;
+            toggleFacadeElements(false);
+            break;
+          case "mur_bois":
+            price = hauteur < 3 ? 30 : 45;
+            toggleFacadeElements(false);
+            break;
+          case "elements_facade":
+            price = 0; // Further calculations occur elsewhere
+            toggleFacadeElements(true);
+            break;
+          default:
+            toggleFacadeElements(false);
+            break;
         }
+        return price;
+      }
 
-        function handleInputChange() {
-            calculatePrices();
-            updateUI();
+      function toggleFacadeElements(show) {
+        const groupeElementsFacade = document.getElementById(
+          "groupeElementsFacade"
+        );
+        if (show) {
+          groupeElementsFacade.classList.remove("groupe_option_disabled");
+          groupeElementsFacade.classList.add("groupe_option");
+        } else {
+          groupeElementsFacade.classList.remove("groupe_option");
+          groupeElementsFacade.classList.add("groupe_option_disabled");
+          document.getElementById("vNbColliers").value = 0;
+          document.getElementById("vNbPincements").value = 0;
         }
+      }
 
-        function calculatePrices() {
-            const hauteur = parseFloat(document.getElementById('vHauteur').value);
-            const couleur = document.getElementById('vCouleur').value;
-            const sommet = document.getElementById('vSommet').value;
-            const typeFixation = document.getElementById('vTypeFixation').value;
-            const nbColliers = parseInt(document.getElementById('vNbColliers').value);
-            const nbPincements = parseInt(document.getElementById('vNbPincements').value);
+      function updateUI() {
+        // Destructure prix details from global variables
+        const {
+          prixHauteur,
+          prixCouleur,
+          prixSommet,
+          prixTypeFixation,
+          prixColliers,
+          prixPincements,
+          prixTotalCHF,
+          prixTotalEUR,
+        } = window.prixDetails;
 
-            // Calculate individual component prices
-            const prixHauteur = calculateHauteurPrice(hauteur);
-            const prixCouleur = calculateCouleurPrice(couleur, hauteur);
-            const prixSommet = calculateSommetPrice(sommet);
-            const prixTypeFixation = calculateTypeFixationPrice(typeFixation, hauteur);
-            const prixColliers = 20 * nbColliers;
-            const prixPincements = 25 * nbPincements;
+        document.getElementById("vTotalHauteur").textContent =
+          prixHauteur.toFixed(2);
+        document.getElementById("vTotalCouleur").textContent =
+          prixCouleur.toFixed(2);
+        document.getElementById("vTotalSommet").textContent =
+          prixSommet.toFixed(2);
+        document.getElementById("vTotalTypeFixation").textContent =
+          prixTypeFixation.toFixed(2);
+        document.getElementById("vTotalNbColliers").textContent =
+          prixColliers.toFixed(2);
+        document.getElementById("vTotalNbPincements").textContent =
+          prixPincements.toFixed(2);
+        document.getElementById("vTotalCHF").textContent =
+          prixTotalCHF.toFixed(2);
+        document.getElementById("vTotalEUR").textContent =
+          prixTotalEUR.toFixed(2);
+      }
 
-            // Update global totals
-            const prixTotalCHF = prixHauteur + prixCouleur + prixSommet + prixTypeFixation + prixColliers + prixPincements;
-            const tauxEUR = parseFloat(document.getElementById('vTauxEUR').value);
-            const prixTotalEUR = prixTotalCHF * tauxEUR;
-
-            // Set global price variables
-            window.prixDetails = { prixHauteur, prixCouleur, prixSommet, prixTypeFixation, prixColliers, prixPincements, prixTotalCHF, prixTotalEUR };
-        }
-
-        function calculateHauteurPrice(hauteur) {
-            if (hauteur < 2.5) return 310 * hauteur;
-            if (hauteur < 4.5) return 280 * hauteur;
-            return 250 * hauteur;
-        }
-
-        function calculateCouleurPrice(couleur, hauteur) {
-            return couleur === 'couleur_oui' ? 20 * hauteur : 0;
-        }
-
-        function calculateSommetPrice(sommet) {
-            switch (sommet) {
-                case 'sommet_sans':
-                case 'sommet_bouchon':
-                    return 0;
-                case 'sommet_boule_inox':
-                    return 50;
-                case 'sommet_chat_cuivre':
-                    return 150;
-                default:
-                    return 0;
+      function fetchExchangeRate() {
+        const url = `https://openexchangerates.org/api/latest.json?app_id=9551dd668ea14e9abcc2c6ee24a4be64`;
+        fetch(url)
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Network response was not ok");
             }
-        }
-
-        function calculateTypeFixationPrice(typeFixation, hauteur) {
-            let price = 0;
-            switch (typeFixation) {
-                case 'mur_beton':
-                case 'mur_isolation':
-                    price = hauteur < 3 ? 40 : 60;
-                    toggleFacadeElements(false);
-                    break;
-                case 'mur_bois':
-                    price = hauteur < 3 ? 30 : 45;
-                    toggleFacadeElements(false);
-                    break;
-                case 'elements_facade':
-                    price = 0; // Further calculations occur elsewhere
-                    toggleFacadeElements(true);
-                    break;
-                default:
-                    toggleFacadeElements(false);
-                    break;
-            }
-            return price;
-        }
-
-        function toggleFacadeElements(show) {
-            const groupeElementsFacade = document.getElementById('groupeElementsFacade');
-            if (show) {
-                groupeElementsFacade.classList.remove('groupe_option_disabled');
-                groupeElementsFacade.classList.add('groupe_option');
-            } else {
-                groupeElementsFacade.classList.remove('groupe_option');
-                groupeElementsFacade.classList.add('groupe_option_disabled');
-                document.getElementById('vNbColliers').value = 0;
-                document.getElementById('vNbPincements').value = 0;
-            }
-        }
-
-        function updateUI() {
-            // Destructure prix details from global variables
-            const { prixHauteur, prixCouleur, prixSommet, prixTypeFixation, prixColliers, prixPincements, prixTotalCHF, prixTotalEUR } = window.prixDetails;
-
-            document.getElementById('vTotalHauteur').textContent = prixHauteur.toFixed(2);
-            document.getElementById('vTotalCouleur').textContent = prixCouleur.toFixed(2);
-            document.getElementById('vTotalSommet').textContent = prixSommet.toFixed(2);
-            document.getElementById('vTotalTypeFixation').textContent = prixTypeFixation.toFixed(2);
-            document.getElementById('vTotalNbColliers').textContent = prixColliers.toFixed(2);
-            document.getElementById('vTotalNbPincements').textContent = prixPincements.toFixed(2);
-            document.getElementById('vTotalCHF').textContent = prixTotalCHF.toFixed(2);
-            document.getElementById('vTotalEUR').textContent = prixTotalEUR.toFixed(2);
-        }
-
-        function fetchExchangeRate() {
-            const url = `https://openexchangerates.org/api/latest.json?app_id=9551dd668ea14e9abcc2c6ee24a4be64`;
-            fetch(url)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    const rateCHF = data.rates.CHF;
-                    const rateEUR = data.rates.EUR;
-                    const exchangeRateCHFtoEUR = rateEUR / rateCHF;
-                    document.getElementById('vTauxEUR').value = exchangeRateCHFtoEUR.toFixed(6);
-                    handleInputChange(); //update UI with calculated result
-                })
-                .catch(error => {
-                    console.error('Error during fetch:', error);
-                    document.getElementById('elemTauxEURError').hidden = false;
-                });
-        }
-
+            return response.json();
+          })
+          .then((data) => {
+            const rateCHF = data.rates.CHF;
+            const rateEUR = data.rates.EUR;
+            const exchangeRateCHFtoEUR = rateEUR / rateCHF;
+            document.getElementById("vTauxEUR").value =
+              exchangeRateCHFtoEUR.toFixed(6);
+            handleInputChange(); //update UI with calculated result
+          })
+          .catch((error) => {
+            console.error("Error during fetch:", error);
+            document.getElementById("elemTauxEURError").hidden = false;
+          });
+      }
     </script>
-</body>
-
+    <!-- implémentation : sjallard<at>gmail<dot>com -->
+  </body>
 </html>
